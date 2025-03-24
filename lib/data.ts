@@ -411,5 +411,43 @@ export interface Asset {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       const kpis = [...featuredAssets, ...trendingAssets].filter((asset) => asset.type === 'kpi')
       return kpis
-    }
+    },
+
+    getKPIDetails: async(id: string, type: string) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      if(type === "kpi"){
+        return kpiDetails[id] || null
+      }else if(type === "dataviz"){
+        return dataVizDetails[id] || null
+      }else{
+        return null
+      }
+    },
+
+    getDataVizDetails: async(id: string) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      return dataVizDetails[id]|| null
+    },
+
+    getLayouts: async() => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      return layouts
+    },
+
+    getLayoutDetails: async(id: string) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const layout = layouts.find((l) => l.id === id) || null
+      return layout
+    },
+
+    getBusinessQuestions: async (): Promise<BusinessQuestion[]> => {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      return businessQuestions
+    },
+
+    getAllKPIDetails: async (): Promise<KPI[]> => {
+      await new Promise((resolve) => setTimeout(resolve, 800))
+      return Object.values(kpiDetails)
+    },
   }

@@ -1,38 +1,37 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import SearchBar from "./SearchBar";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from "next/navigation";
 import AssetGrid from "./AssetGrid";
-import { api, type Asset, type Layout, type Storyboard } from "@/lib/data"
+import { api } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Library() {
+  const searchParams = useSearchParams();
 
-  const searchParams = useSearchParams()
+  const activeTab = searchParams.get("tab") || "featured";
 
-  const activeTab = searchParams.get('tab') || "featured"
+  const { data: featureAssets = [], isLoading: featuredAssetsLoading } =
+    useQuery({
+      queryKey: ["featured", "assets"],
+      queryFn: () => api.getFeaturesAssets(),
+      enabled: activeTab === "featured",
+    });
 
-  const { data: featureAssets = [], isLoading: featuredAssetsLoading } = useQuery({
-    queryKey: ["featured","assets"],
-    queryFn: () => api.getFeaturesAssets(),
-    enabled: activeTab === "featured"
-  });
+  const { data: trendingAssets = [], isLoading: trendingAssetsLoading } =
+    useQuery({
+      queryKey: ["trending", "assets"],
+      queryFn: () => api.getTrendingAssets(),
+      enabled: activeTab === "featured",
+    });
 
-
-  const { data: trendingAssets = [], isLoading : trendingAssetsLoading } = useQuery({
-    queryKey: ["trending","assets"],
-    queryFn: () => api.getTrendingAssets(),
-    enabled: activeTab === "featured"
-  });
-
-  const {data : kpis = []} = useQuery({
-    queryKey: ['kpi', "assets"],
+  const { data: kpis = [] } = useQuery({
+    queryKey: ["kpi", "assets"],
     queryFn: () => api.getKpis(),
-    enabled: activeTab === "kpis"
-  })
-  
-  
+    enabled: activeTab === "kpis",
+  });
+
   return (
     <div>
       <div className="container mx-auto px-4 py-8">
@@ -56,23 +55,42 @@ export default function Library() {
 
         <div className="bg-gray-200 rounded-md">
           <div className="flex">
-            <Link className={`px-6 py-3 font-medium text-sm cursor-pointer ${activeTab === "featured" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`} href={`/?tab=featured`}> 
+            <Link
+              className={`px-6 py-3 font-medium text-sm cursor-pointer ${
+                activeTab === "featured"
+                  ? "text-black border-b-2 border-gray-500"
+                  : "text-gray-500"
+              }`}
+              href={`/?tab=featured`}
+            >
               Featured
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm cursor-pointer ${activeTab === "kpis" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
+              className={`px-6 py-3 font-medium text-sm cursor-pointer ${
+                activeTab === "kpis"
+                  ? "text-black border-b-2 border-gray-500"
+                  : "text-gray-500"
+              }`}
               href={`/?tab=kpis`}
             >
               KPIs
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm cursor-pointer ${activeTab === "layout" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
+              className={`px-6 py-3 font-medium text-sm cursor-pointer ${
+                activeTab === "layout"
+                  ? "text-black border-b-2 border-gray-500"
+                  : "text-gray-500"
+              }`}
               href={`/?tab=layout`}
             >
               Layouts
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm cursor-pointer ${activeTab === "storyboard" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
+              className={`px-6 py-3 font-medium text-sm cursor-pointer ${
+                activeTab === "storyboard"
+                  ? "text-black border-b-2 border-gray-500"
+                  : "text-gray-500"
+              }`}
               href={`/?tab=storyboard`}
             >
               Storyboards
@@ -80,20 +98,31 @@ export default function Library() {
           </div>
         </div>
 
-
         <>
-            {activeTab === "featured" && (
-              <>
-                <AssetGrid title="Featured" subtitle="Most popular assets across the organization" assets={featureAssets}/>
+          {activeTab === "featured" && (
+            <>
+              <AssetGrid
+                title="Featured"
+                subtitle="Most popular assets across the organization"
+                assets={featureAssets}
+              />
+              <AssetGrid
+                title="Trending"
+                subtitle="Most trending assets across the organization"
+                assets={trendingAssets}
+              />
+            </>
+          )}
 
-                <AssetGrid title="Trending" subtitle="Most trending assets across the organization" assets={trendingAssets}/>
-              
-              </>
-            )}
+          {activeTab === "kpis" && (
+            <AssetGrid
+              title="Key Performance Indicators"
+              subtitle="Metrics to track business performance"
+              assets={kpis}
+            />
+          )}
 
-            {activeTab === "kpis" && (
-              <AssetGrid title="Key Performance Indicators" subtitle="Metrics to track business performance" assets={kpis}/>
-            )}
+          {activeTab === "layout" && <div>Layout</div>}
         </>
       </div>
     </div>
