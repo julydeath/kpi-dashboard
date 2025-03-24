@@ -392,3 +392,18 @@ export interface Asset {
       description: "Determine actionable steps to positively impact this KPI in the next quarter",
     },
   ]
+
+
+  //API functions to get data
+
+  export const api = {
+    getFeaturesAssets : async() => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return featuredAssets
+    },
+
+    getTrendingAssets : async() => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return trendingAssets 
+    }
+  }
