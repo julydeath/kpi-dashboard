@@ -1,44 +1,54 @@
-"use client"
+"use clent";
 
-import { useState } from "react"
-// import MetricCard from "./MetricCard"
-// import AssetDetailModal from "./AssetDetailModal"
-
+import { assert } from "console";
+import AssetModal from "./AssetModel";
+import MetricCard from "./MetricCard";
+import { useState } from "react";
 
 export const featuredAssets = [
-    {
-      id: "1",
-      title: "Sales Performance",
-      description: "Track monthly sales performance across all regions and product categories",
-      type: "kpi",
-      icon: "chart",
-    },
-    {
-      id: "2",
-      title: "Customer Retention",
-      description: "Measure customer retention rates and identify churn patterns",
-      type: "kpi",
-      icon: "clock",
-    },
-    {
-      id: "3",
-      title: "Marketing ROI",
-      description: "Analyze return on investment for marketing campaigns across channels",
-      type: "dataviz",
-      icon: "chart",
-    },
-    {
-      id: "4",
-      title: "Operational Efficiency",
-      description: "Monitor key operational metrics and identify optimization opportunities",
-      type: "kpi",
-      icon: "chart",
-    },
-  ]
+  {
+    id: "1",
+    title: "Sales Performance",
+    description:
+      "Track monthly sales performance across all regions and product categories",
+    type: "kpi",
+    icon: "chart",
+  },
+  {
+    id: "2",
+    title: "Customer Retention",
+    description: "Measure customer retention rates and identify churn patterns",
+    type: "kpi",
+    icon: "clock",
+  },
+  {
+    id: "3",
+    title: "Marketing ROI",
+    description:
+      "Analyze return on investment for marketing campaigns across channels",
+    type: "dataviz",
+    icon: "chart",
+  },
+  {
+    id: "4",
+    title: "Operational Efficiency",
+    description:
+      "Monitor key operational metrics and identify optimization opportunities",
+    type: "kpi",
+    icon: "chart",
+  },
+];
 
 export default function AssetGrid() {
+  const [selectedAsset, setSelectedAsset] = useState();
 
+  const handleAssetClick = (asset) => {
+    setSelectedAsset(asset);
+  };
 
+  const handleModelClose = () => {
+    setSelectedAsset(null);
+  };
   return (
     <div className="mt-6">
       <div className="mb-4">
@@ -49,7 +59,13 @@ export default function AssetGrid() {
       {featuredAssets.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {featuredAssets.map((asset) => (
-            <div key={asset.id}>{asset.title}</div>
+            <MetricCard
+              key={asset.id}
+              title={asset.title}
+              description={asset.description}
+              icon={asset.icon}
+              onClick={() => handleAssetClick(asset)}
+            />
           ))}
         </div>
       ) : (
@@ -58,8 +74,9 @@ export default function AssetGrid() {
         </div>
       )}
 
-      {/* {selectedAsset && <AssetDetailModal asset={selectedAsset} onClose={handleCloseModal} />} */}
+      {selectedAsset && (
+        <AssetModal asset={selectedAsset} onClose={handleModelClose} />
+      )}
     </div>
-  )
+  );
 }
-

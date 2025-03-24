@@ -36,23 +36,23 @@ export default function Library() {
 
         <div className="bg-gray-200 rounded-md">
           <div className="flex">
-            <Link className={`px-6 py-3 font-medium text-sm`} href={`/?tab=featured`}> 
+            <Link className={`px-6 py-3 font-medium text-sm ${activeTab === "featured" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`} href={`/?tab=featured`}> 
               Featured
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm`}
+              className={`px-6 py-3 font-medium text-sm ${activeTab === "kpi" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
               href={`/?tab=kpi`}
             >
               KPIs
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm`}
+              className={`px-6 py-3 font-medium text-sm ${activeTab === "layout" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
               href={`/?tab=layout`}
             >
               Layouts
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm`}
+              className={`px-6 py-3 font-medium text-sm ${activeTab === "storyboard" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
               href={`/?tab=storyboard`}
             >
               Storyboards
