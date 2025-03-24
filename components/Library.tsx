@@ -7,6 +7,7 @@ import AssetGrid from "./AssetGrid";
 import { api } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
+import LayoutDashboard from "./LayoutDashboard";
 
 export default function Library() {
   const searchParams = useSearchParams();
@@ -126,7 +127,11 @@ export default function Library() {
             />
           )}
 
-          {activeTab === "layout" && <div>Layout</div>}
+          {activeTab === "layout" && (
+            <div>
+              <LayoutDashboard />
+            </div>
+          )}
           {activeTab === "storyboard" && <div>Story Board</div>}
         </>
       </div>

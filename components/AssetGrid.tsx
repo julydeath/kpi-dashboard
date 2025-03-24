@@ -36,6 +36,7 @@ export default function AssetGrid({
   const handleModelClose = () => {
     setSelectedAsset(null);
   };
+
   return (
     <div className="mt-6">
       <div className="mb-4">

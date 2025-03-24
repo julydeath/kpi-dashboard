@@ -360,7 +360,7 @@ export const layouts: Layout[] = [
   {
     id: "layout1",
     title: "Sales Dashboard",
-    description: "Comprehensive view of sales performance across regions",
+    description: "Broad view of sales performance across regions",
     pages: 3,
     kpis: [
       { id: "1", title: "Sales Performance", chartType: "bar" },
