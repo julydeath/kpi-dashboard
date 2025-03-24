@@ -1,6 +1,5 @@
 "use clent";
 
-import { assert } from "console";
 import AssetModal from "./AssetModel";
 import MetricCard from "./MetricCard";
 import { useState } from "react";

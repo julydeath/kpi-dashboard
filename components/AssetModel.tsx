@@ -11,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import BusinessQuestions from "./BusinessQuestions";
 
 export default function AssetModal({ asset, onClose } : any) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -164,6 +165,8 @@ export default function AssetModal({ asset, onClose } : any) {
                 </div>
               </div>
             )}
+
+            {activeTab === 'questions' && <BusinessQuestions questions={businessQuestions}/>}
           </div>
 
           <div className="flex justify-between p-6 border-t">
