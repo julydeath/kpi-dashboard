@@ -9,12 +9,14 @@ import LayoutDashboard from "./LayoutDashboard";
 import { Search } from "lucide-react";
 import useDebounce from "@/utils/useDebounce";
 import { useState } from "react";
+import RequestForm from "./RequestForm";
 
 export default function Library() {
   const searchParams = useSearchParams();
   const activeTab = searchParams.get("tab") || "featured";
 
   const [input, setInput] = useState("");
+  const [showRequest, setShowRequest] = useState(false);
 
   const debouncedValue = useDebounce(input, 1000);
 
@@ -78,7 +80,10 @@ export default function Library() {
             </p>
           </div>
           <div className="mt-4 md:mt-0">
-            <button className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer">
+            <button
+              className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer"
+              onClick={() => setShowRequest(true)}
+            >
               Request
             </button>
           </div>
@@ -178,6 +183,7 @@ export default function Library() {
           {activeTab === "storyboard" && <div>Story Board</div>}
         </>
       </div>
+      {showRequest && <RequestForm onClose={() => setShowRequest(false)} />}
     </div>
   );
 }

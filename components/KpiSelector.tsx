@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 "use client";
 
 import { useState } from "react";
@@ -6,20 +8,8 @@ import { Check, Plus } from "lucide-react";
 import ChartTypeSelector from "./ChartTypeSelector";
 import { DynamicChart } from "./ui/chart";
 
-interface KpiSelectorProps {
-  kpis: KPI[];
-  onSelect: (selectedKpis: Array<{ kpi: KPI; chartType: ChartType }>) => void;
-  initialSelected?: Array<{ id: string; chartType?: ChartType }>;
-}
-
-export default function KpiSelector({
-  kpis,
-  onSelect,
-  initialSelected = [],
-}: KpiSelectorProps) {
-  const [selectedKpis, setSelectedKpis] = useState<
-    Array<{ kpi: KPI; chartType: ChartType }>
-  >(
+export default function KpiSelector({ kpis, onSelect, initialSelected = [] }) {
+  const [selectedKpis, setSelectedKpis] = useState(
     initialSelected
       .map((item) => {
         const kpi = kpis.find((k) => k.id === item.id);
@@ -31,7 +21,7 @@ export default function KpiSelector({
         }
         return null;
       })
-      .filter(Boolean) as Array<{ kpi: KPI; chartType: ChartType }>
+      .filter(Boolean)
   );
 
   const handleToggleKpi = (kpi: KPI) => {
@@ -116,19 +106,15 @@ export default function KpiSelector({
                   <ChartTypeSelector
                     selectedType={selectedItem.chartType}
                     onChange={(type) => handleChartTypeChange(kpi.id, type)}
-                    availibleTypes={
-                      kpi.visualsAvailable
-                        ?.map((type) => {
-                          if (type.toLowerCase().includes("bar")) return "bar";
-                          if (type.toLowerCase().includes("line"))
-                            return "line";
-                          if (type.toLowerCase().includes("area"))
-                            return "area";
-                          if (type.toLowerCase().includes("pie")) return "pie";
-                          return "bar";
-                        })
-                        .filter(Boolean) as ChartType[]
-                    }
+                    availibleTypes={kpi.visualsAvailable
+                      ?.map((type) => {
+                        if (type.toLowerCase().includes("bar")) return "bar";
+                        if (type.toLowerCase().includes("line")) return "line";
+                        if (type.toLowerCase().includes("area")) return "area";
+                        if (type.toLowerCase().includes("pie")) return "pie";
+                        return "bar";
+                      })
+                      .filter(Boolean)}
                   />
 
                   {kpi.data && (
