@@ -9,7 +9,9 @@ export default function Library() {
   const searchParams = useSearchParams()
 
   const search = searchParams.get('tab')
-  
+
+  // console.log({search})
+
   return (
     <div>
       <div className="container mx-auto px-4 py-8">
@@ -33,44 +35,24 @@ export default function Library() {
 
         <div className="bg-gray-200 rounded-md">
           <div className="flex">
-            <Link className={`px-6 py-3 font-medium text-sm`} href={{
-                pathname : '/',
-                query : {
-                    tab : "featured"
-                }
-            }}> 
+            <Link className={`px-6 py-3 font-medium text-sm`} href={`/?tab=featured`}> 
               Featured
             </Link>
             <Link
               className={`px-6 py-3 font-medium text-sm`}
-              href={{
-                pathname : '/',
-                query : {
-                    tab : "kpi"
-                }
-            }}
+              href={`/?tab=kpi`}
             >
               KPIs
             </Link>
             <Link
               className={`px-6 py-3 font-medium text-sm`}
-              href={{
-                pathname : '/',
-                query : {
-                    tab : "layouts"
-                }
-            }}
+              href={`/?tab=layout`}
             >
               Layouts
             </Link>
             <Link
               className={`px-6 py-3 font-medium text-sm`}
-              href={{
-                pathname : '/',
-                query : {
-                    tab : "storyboards"
-                }
-            }}
+              href={`/?tab=storyboard`}
             >
               Storyboards
             </Link>
