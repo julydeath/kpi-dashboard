@@ -3,6 +3,13 @@
 import AssetModal from "./AssetModel";
 import MetricCard from "./MetricCard";
 import { useState } from "react";
+import type {Asset} from '@/lib/data'
+
+interface AssetGridProps {
+  title: string
+  subtitle?: string
+  assets: Asset[]
+}
 
 export const featuredAssets = [
   {
@@ -39,9 +46,9 @@ export const featuredAssets = [
 ];
 
 export default function AssetGrid() {
-  const [selectedAsset, setSelectedAsset] = useState();
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
 
-  const handleAssetClick = (asset) => {
+  const handleAssetClick = (asset: Asset) => {
     setSelectedAsset(asset);
   };
 

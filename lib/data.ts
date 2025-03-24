@@ -3,8 +3,8 @@ export interface Asset {
     id: string
     title: string
     description: string
-    type: "kpi" | "dataviz" | "layout" | "storyboard"
-    icon?: "chart" | "clock" | "alert"
+    type: string
+    icon?: string
   }
   
   export interface KPI extends Asset {
