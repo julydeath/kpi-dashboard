@@ -16,10 +16,12 @@ export interface Asset {
     calculation: string
     visualsAvailable: string[]
     affiliateApplicability: string[]
+    data?: ChartData[]
   }
   
   export interface DataViz extends Asset {
-    chartData: any[]
+    chartData: ChartData[]
+    chartType: ChartType
   }
   
   export interface Layout {
@@ -30,6 +32,7 @@ export interface Asset {
     kpis: Array<{
       id: string
       title: string
+      chartType?: ChartType
     }>
     preview: string
   }
@@ -47,6 +50,13 @@ export interface Asset {
     id: string
     question: string
     description: string
+  }
+  
+  export type ChartType = "bar" | "line" | "pie" | "area"
+  
+  export interface ChartData {
+    name: string
+    value: number
   }
   
   // Mock data
@@ -137,8 +147,16 @@ export interface Asset {
         },
       ],
       calculation: "SUM(sales_amount) GROUP BY time_period, region, product_category",
-      visualsAvailable: ["Bar Chart", "Line Chart", "Heat Map", "Geo Map"],
+      visualsAvailable: ["Bar Chart", "Line Chart", "Area Chart", "Pie Chart"],
       affiliateApplicability: ["North America", "Europe", "Asia Pacific", "Latin America"],
+      data: [
+        { name: "Jan", value: 4000 },
+        { name: "Feb", value: 3000 },
+        { name: "Mar", value: 2000 },
+        { name: "Apr", value: 2780 },
+        { name: "May", value: 1890 },
+        { name: "Jun", value: 2390 },
+      ],
     },
     "2": {
       id: "2",
@@ -159,10 +177,102 @@ export interface Asset {
         },
       ],
       calculation: "(Customers at End of Period - New Customers) / Customers at Start of Period",
-      visualsAvailable: ["Line Chart", "Cohort Analysis", "Funnel Chart"],
+      visualsAvailable: ["Line Chart", "Bar Chart", "Area Chart"],
       affiliateApplicability: ["North America", "Europe"],
+      data: [
+        { name: "Q1", value: 85 },
+        { name: "Q2", value: 83 },
+        { name: "Q3", value: 88 },
+        { name: "Q4", value: 91 },
+      ],
     },
-    // Add more KPIs as needed
+    "4": {
+      id: "4",
+      title: "Operational Efficiency",
+      description: "Monitor key operational metrics and identify optimization opportunities",
+      type: "kpi",
+      icon: "chart",
+      businessQuestions: [
+        {
+          id: "q1",
+          question: "Which processes are most efficient?",
+          description: "Identify processes with the highest efficiency ratings",
+        },
+        {
+          id: "q2",
+          question: "Where are the bottlenecks in our operations?",
+          description: "Locate areas where operational flow is constrained",
+        },
+      ],
+      calculation: "Output / Input * 100",
+      visualsAvailable: ["Bar Chart", "Line Chart", "Pie Chart"],
+      affiliateApplicability: ["North America", "Europe", "Asia Pacific"],
+      data: [
+        { name: "Process A", value: 75 },
+        { name: "Process B", value: 63 },
+        { name: "Process C", value: 82 },
+        { name: "Process D", value: 91 },
+        { name: "Process E", value: 45 },
+      ],
+    },
+    "5": {
+      id: "5",
+      title: "Revenue Growth",
+      description: "Track year-over-year revenue growth by product line and region",
+      type: "kpi",
+      icon: "chart",
+      businessQuestions: [
+        {
+          id: "q1",
+          question: "Which product lines are growing fastest?",
+          description: "Identify product lines with the highest growth rates",
+        },
+        {
+          id: "q2",
+          question: "How does regional growth compare?",
+          description: "Compare revenue growth across different geographic regions",
+        },
+      ],
+      calculation: "((Current Period Revenue - Previous Period Revenue) / Previous Period Revenue) * 100",
+      visualsAvailable: ["Bar Chart", "Line Chart", "Area Chart"],
+      affiliateApplicability: ["North America", "Europe", "Asia Pacific", "Latin America"],
+      data: [
+        { name: "Product A", value: 12 },
+        { name: "Product B", value: 18 },
+        { name: "Product C", value: 5 },
+        { name: "Product D", value: 22 },
+        { name: "Product E", value: -3 },
+      ],
+    },
+    "7": {
+      id: "7",
+      title: "Inventory Turnover",
+      description: "Analyze inventory turnover rates and identify slow-moving products",
+      type: "kpi",
+      icon: "clock",
+      businessQuestions: [
+        {
+          id: "q1",
+          question: "Which products have the highest turnover?",
+          description: "Identify products that sell through inventory most quickly",
+        },
+        {
+          id: "q2",
+          question: "Where do we have excess inventory?",
+          description: "Locate areas where inventory is moving slowly",
+        },
+      ],
+      calculation: "Cost of Goods Sold / Average Inventory",
+      visualsAvailable: ["Bar Chart", "Pie Chart"],
+      affiliateApplicability: ["North America", "Europe", "Asia Pacific"],
+      data: [
+        { name: "Electronics", value: 8.2 },
+        { name: "Clothing", value: 6.5 },
+        { name: "Home Goods", value: 4.3 },
+        { name: "Sporting Goods", value: 5.7 },
+        { name: "Books", value: 3.1 },
+      ],
+    },
   }
   
   export const dataVizDetails: Record<string, DataViz> = {
@@ -172,6 +282,7 @@ export interface Asset {
       description: "Analyze return on investment for marketing campaigns across channels",
       type: "dataviz",
       icon: "chart",
+      chartType: "bar",
       chartData: [
         { name: "Social Media", value: 4000 },
         { name: "Email", value: 3000 },
@@ -187,6 +298,7 @@ export interface Asset {
       description: "Monitor NPS scores and customer satisfaction metrics over time",
       type: "dataviz",
       icon: "chart",
+      chartType: "line",
       chartData: [
         { name: "Jan", value: 75 },
         { name: "Feb", value: 78 },
@@ -196,7 +308,21 @@ export interface Asset {
         { name: "Jun", value: 83 },
       ],
     },
-    // Add more DataViz as needed
+    "8": {
+      id: "8",
+      title: "Employee Productivity",
+      description: "Measure employee productivity metrics across departments",
+      type: "dataviz",
+      icon: "chart",
+      chartType: "area",
+      chartData: [
+        { name: "Engineering", value: 92 },
+        { name: "Sales", value: 88 },
+        { name: "Marketing", value: 85 },
+        { name: "Support", value: 90 },
+        { name: "Operations", value: 82 },
+      ],
+    },
   }
   
   export const layouts: Layout[] = [
@@ -206,9 +332,9 @@ export interface Asset {
       description: "Comprehensive view of sales performance across regions",
       pages: 3,
       kpis: [
-        { id: "1", title: "Sales Performance" },
-        { id: "5", title: "Revenue Growth" },
-        { id: "3", title: "Marketing ROI" },
+        { id: "1", title: "Sales Performance", chartType: "bar" },
+        { id: "5", title: "Revenue Growth", chartType: "line" },
+        { id: "3", title: "Marketing ROI", chartType: "pie" },
       ],
       preview: "/placeholder.svg?height=400&width=600",
     },
@@ -218,8 +344,8 @@ export interface Asset {
       description: "Key metrics related to customer behavior and satisfaction",
       pages: 2,
       kpis: [
-        { id: "2", title: "Customer Retention" },
-        { id: "6", title: "Customer Satisfaction" },
+        { id: "2", title: "Customer Retention", chartType: "area" },
+        { id: "6", title: "Customer Satisfaction", chartType: "line" },
       ],
       preview: "/placeholder.svg?height=400&width=600",
     },

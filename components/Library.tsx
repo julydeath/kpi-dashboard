@@ -4,6 +4,7 @@ import Link from "next/link";
 import SearchBar from "./SearchBar";
 import { useSearchParams } from 'next/navigation'
 import AssetGrid from "./AssetGrid";
+import { type Asset, type Layout, type Storyboard } from "@/lib/data"
 
 export default function Library() {
 
@@ -11,7 +12,6 @@ export default function Library() {
 
   const activeTab = searchParams.get('tab') || "featured"
 
-  // console.log({search})
 
   return (
     <div>
@@ -69,7 +69,7 @@ export default function Library() {
             {activeTab === "kpi" && (
               <AssetGrid />
             )}
-          </>
+        </>
       </div>
     </div>
   );
