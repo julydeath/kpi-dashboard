@@ -95,7 +95,7 @@ export default function KpiSelector({
                   onClick={() => handleToggleKpi(kpi)}
                   className={`p-1 rounded-full ${
                     isSelected
-                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      ? "bg-black text-white hover:bg-gray-600"
                       : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                   }`}
                 >
@@ -156,7 +156,7 @@ export default function KpiSelector({
         </div>
         <button
           onClick={handleApply}
-          className="px-4 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700"
+          className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-700"
           disabled={selectedKpis.length === 0}
         >
           Apply Selection
