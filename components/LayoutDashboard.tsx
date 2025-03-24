@@ -13,7 +13,7 @@ interface LayoutDashboardProps {
 const LoadingSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     {[...Array(4)].map((_, index) => (
-      <div key={index} className="bg-gray-200 animate-pulse rounded-lg h-24" />
+      <div key={index} className="bg-gray-200 animate-pulse rounded-lg h-32" />
     ))}
   </div>
 );
@@ -22,7 +22,23 @@ export default function LayoutDashboard({
   layouts,
   isLoading,
 }: LayoutDashboardProps) {
-  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [selectedLayout, setSelectedLayout] = useState<Layout | null>(null);
+  const [showLayoutModal, setShowLayoutModal] = useState<boolean>(false);
+
+  const handleViewLayout = (layout: Layout) => {
+    setSelectedLayout(layout);
+    setShowLayoutModal(true);
+  };
+
+  const closeLayoutModal = () => {
+    setShowLayoutModal(false);
+  };
+
+  const handleCreateLayout = () => {
+    setSelectedLayout(null);
+    setShowLayoutModal(true);
+  };
+
   return (
     <div className="mt-6">
       <div>
@@ -35,7 +51,10 @@ export default function LayoutDashboard({
               </p>
             </div>
             <div className="mt-4 md:mt-0">
-              <button className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer">
+              <button
+                className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer"
+                onClick={handleCreateLayout}
+              >
                 Create Layout
               </button>
             </div>
@@ -48,13 +67,14 @@ export default function LayoutDashboard({
               {layouts.map((layout) => (
                 <div
                   key={layout.id}
-                  className="border border-gray-400 rounded-lg p-4"
+                  className="relative border border-gray-400 rounded-lg p-4 cursor-pointer"
+                  onClick={() => handleViewLayout(layout)}
                 >
                   <h3 className="font-medium text-gray-900">{layout.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-gray-500 mt-1 line-clamp-2">
                     {layout.description}
                   </p>
-                  <div className="flex justify-between items-center mt-3">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-between items-center border-t border-gray-200">
                     <span className="text-xs text-gray-500">
                       {layout.pages} pages
                     </span>
@@ -65,7 +85,10 @@ export default function LayoutDashboard({
                 </div>
               ))}
 
-              <div className="bg-white p-4 rounded-lg border border-dashed border-gray-300 hover:border-gray-700 transition-colors cursor-pointer flex flex-col items-center justify-center text-center">
+              <div
+                className="bg-white p-4 rounded-lg border border-dashed border-gray-300 hover:border-gray-700 transition-colors cursor-pointer flex flex-col items-center justify-center text-center"
+                onClick={() => handleCreateLayout()}
+              >
                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3">
                   <Plus />
                 </div>
@@ -81,13 +104,18 @@ export default function LayoutDashboard({
                 No layouts are avalible. Create your first layout
               </p>
 
-              <button className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer">
+              <button
+                className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer"
+                onClick={handleCreateLayout}
+              >
                 Create Layout
               </button>
             </div>
           )}
 
-          {selectedAsset && <LayoutModel />}
+          {showLayoutModal && (
+            <LayoutModel layout={selectedLayout} onClose={closeLayoutModal} />
+          )}
         </div>
       </div>
     </div>

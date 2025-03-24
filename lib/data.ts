@@ -65,7 +65,7 @@ export const featuredAssets: Asset[] = [
     id: "1",
     title: "Sales Performance",
     description:
-      "Track monthly sales performance across all regions and product categories",
+      "Track monthly sales performance across all regions and product categories.This repository is a compilation of well-written, step-by-step guides for re-creating our favorite technologies from scratch.",
     type: "kpi",
     icon: "chart",
   },
@@ -372,7 +372,8 @@ export const layouts: Layout[] = [
   {
     id: "layout2",
     title: "Customer Insights",
-    description: "Key metrics related to customer behavior and satisfaction",
+    description:
+      "Key metrics related to customer behavior and satisfaction.This repository is a compilation of well-written, step-by-step guides for re-creating our favorite technologies from scratch.",
     pages: 2,
     kpis: [
       { id: "2", title: "Customer Retention", chartType: "area" },
