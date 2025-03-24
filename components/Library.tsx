@@ -1,6 +1,15 @@
+'use client'
+
+import Link from "next/link";
 import SearchBar from "./SearchBar";
+import { useSearchParams } from 'next/navigation'
 
 export default function Library() {
+
+  const searchParams = useSearchParams()
+
+  const search = searchParams.get('tab')
+  
   return (
     <div>
       <div className="container mx-auto px-4 py-8">
@@ -12,7 +21,7 @@ export default function Library() {
             </p>
           </div>
           <div className="mt-4 md:mt-0">
-            <button className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800">
+            <button className="px-4 py-2 bg-black rounded-md text-white hover:bg-gray-800 hover:cursor-pointer">
               Request
             </button>
           </div>
@@ -20,6 +29,52 @@ export default function Library() {
 
         <div className="mb-8">
           <SearchBar />
+        </div>
+
+        <div className="bg-gray-200 rounded-md">
+          <div className="flex">
+            <Link className={`px-6 py-3 font-medium text-sm`} href={{
+                pathname : '/',
+                query : {
+                    tab : "featured"
+                }
+            }}> 
+              Featured
+            </Link>
+            <Link
+              className={`px-6 py-3 font-medium text-sm`}
+              href={{
+                pathname : '/',
+                query : {
+                    tab : "kpi"
+                }
+            }}
+            >
+              KPIs
+            </Link>
+            <Link
+              className={`px-6 py-3 font-medium text-sm`}
+              href={{
+                pathname : '/',
+                query : {
+                    tab : "layouts"
+                }
+            }}
+            >
+              Layouts
+            </Link>
+            <Link
+              className={`px-6 py-3 font-medium text-sm`}
+              href={{
+                pathname : '/',
+                query : {
+                    tab : "storyboards"
+                }
+            }}
+            >
+              Storyboards
+            </Link>
+          </div>
         </div>
       </div>
     </div>
