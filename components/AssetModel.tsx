@@ -34,6 +34,14 @@ export default function AssetModal({ asset, onClose } : any) {
     }
   };
 
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite)
+  }
+
+  const copyLink = () => {
+    alert("Link copied to clipboard!")
+  }
+
   return (
     <>
       <div className="fixed inset-0 flex items-center bg-black/50 justify-center z-50 p-4">
@@ -45,7 +53,7 @@ export default function AssetModal({ asset, onClose } : any) {
             </div>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 hover: cursor-pointer"
             >
               <X className="h-6 w-6" />
             </button>
@@ -164,28 +172,26 @@ export default function AssetModal({ asset, onClose } : any) {
                 className={`flex items-center gap-2 px-4 py-2 rounded-md ${
                   isFavorite
                     ? "bg-red-50 text-red-600"
-                    : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                    : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
                 }`}
+                onClick={toggleFavorite}
               >
                 <Heart
                   className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`}
                 />
                 {isFavorite ? "Favorited" : "Favorite"}
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+              <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 hover:cursor-pointer" onClick={copyLink}>
                 <Link className="h-4 w-4" />
                 Copy Link
               </button>
             </div>
             <div className="flex gap-3">
               <button
-                className="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
                 onClick={onClose}
               >
                 Close
-              </button>
-              <button className="px-4 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700">
-                Request Access
               </button>
             </div>
           </div>
