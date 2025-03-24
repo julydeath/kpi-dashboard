@@ -3,12 +3,13 @@
 import Link from "next/link";
 import SearchBar from "./SearchBar";
 import { useSearchParams } from 'next/navigation'
+import AssetGrid from "./AssetGrid";
 
 export default function Library() {
 
   const searchParams = useSearchParams()
 
-  const search = searchParams.get('tab')
+  const activeTab = searchParams.get('tab') || "featured"
 
   // console.log({search})
 
@@ -58,6 +59,19 @@ export default function Library() {
             </Link>
           </div>
         </div>
+
+
+        <>
+            {activeTab === "featured" && (
+              <>
+                <AssetGrid />
+              </>
+            )}
+
+            {activeTab === "kpi" && (
+              <AssetGrid />
+            )}
+          </>
       </div>
     </div>
   );
