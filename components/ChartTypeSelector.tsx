@@ -4,17 +4,17 @@ import { AreaChart, BarChart2, LineChart, PieChart } from "lucide-react";
 interface ChartTypeSelectorProps {
   selectedType: ChartType;
   onChange: (type: ChartType) => void;
-  avalibleTypes: ChartType[];
+  availibleTypes: ChartType[];
 }
 
 export default function ChartTypeSelector({
   selectedType,
   onChange,
-  avalibleTypes = ["bar", "line", "area", "pie"],
+  availibleTypes = ["bar", "line", "area", "pie"],
 }: ChartTypeSelectorProps) {
   return (
     <div className="flex flex-wrap gap-2">
-      {avalibleTypes.includes("bar") && (
+      {availibleTypes.includes("bar") && (
         <button
           type="button"
           onClick={() => onChange("bar")}
@@ -29,7 +29,7 @@ export default function ChartTypeSelector({
         </button>
       )}
 
-      {avalibleTypes.includes("line") && (
+      {availibleTypes.includes("line") && (
         <button
           type="button"
           onClick={() => onChange("line")}
@@ -44,7 +44,7 @@ export default function ChartTypeSelector({
         </button>
       )}
 
-      {avalibleTypes.includes("area") && (
+      {availibleTypes.includes("area") && (
         <button
           type="button"
           onClick={() => onChange("area")}
@@ -59,7 +59,7 @@ export default function ChartTypeSelector({
         </button>
       )}
 
-      {avalibleTypes.includes("pie") && (
+      {availibleTypes.includes("pie") && (
         <button
           type="button"
           onClick={() => onChange("pie")}

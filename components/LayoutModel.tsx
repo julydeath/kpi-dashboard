@@ -1,10 +1,11 @@
 "use client";
 
 import { X, Plus, Edit, Copy } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Layout, KPI, ChartType } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/data";
+import KpiSelector from "./KpiSelector";
 
 interface LayoutModalProps {
   layout?: Layout | null;
@@ -42,6 +43,37 @@ export default function LayoutModal({ layout, onClose }: LayoutModalProps) {
   // Show KPI selector when adding KPIs
   const [showKpiSelector, setShowKpiSelector] = useState(false);
 
+  // Fetch all KPIs for selection
+  const { data: kpis = [] } = useQuery({
+    queryKey: ["kpis", "all"],
+    queryFn: api.getAllKPIDetails,
+  });
+
+  // Load KPI details for existing layout
+  useEffect(() => {
+    if (!isCreating && layout && layout.kpis.length > 0 && kpis.length > 0) {
+      const mappedKpis = layout.kpis
+        .map((kpi) => {
+          const kpiDetails = kpis.find((k) => k.id === kpi.id);
+          return kpiDetails
+            ? {
+                kpi: kpiDetails,
+                chartType: kpi.chartType || "bar",
+              }
+            : null;
+        })
+        .filter(Boolean) as Array<{ kpi: KPI; chartType: ChartType }>;
+
+      setSelectedKpis(mappedKpis);
+    }
+  }, [isCreating, layout, kpis]);
+
+  const handleKpiSelection = (
+    selected: Array<{ kpi: KPI; chartType: ChartType }>
+  ) => {
+    setSelectedKpis(selected);
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -51,7 +83,7 @@ export default function LayoutModal({ layout, onClose }: LayoutModalProps) {
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 cursor-pointer"
           >
             <X className="h-6 w-6" />
           </button>
@@ -165,6 +197,11 @@ export default function LayoutModal({ layout, onClose }: LayoutModalProps) {
                           <X className="h-5 w-5 cursor-pointer" />
                         </button>
                       </div>
+                      <KpiSelector
+                        kpis={kpis}
+                        onSelect={handleKpiSelection}
+                        initialSelected={currentLayout.kpis}
+                      />
                     </div>
                   ) : (
                     <div className="bg-gray-50 p-4 rounded-lg border border-dashed border-gray-300 text-center">
@@ -394,6 +431,11 @@ export default function LayoutModal({ layout, onClose }: LayoutModalProps) {
                             <X className="h-5 w-5" />
                           </button>
                         </div>
+                        <KpiSelector
+                          kpis={kpis}
+                          onSelect={handleKpiSelection}
+                          initialSelected={currentLayout.kpis}
+                        />
                       </div>
                     )}
                   </div>
