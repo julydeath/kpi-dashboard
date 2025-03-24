@@ -1,47 +1,71 @@
 "use client";
 
 import Link from "next/link";
-import SearchBar from "./SearchBar";
 import { useSearchParams } from "next/navigation";
 import AssetGrid from "./AssetGrid";
 import { api } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 import LayoutDashboard from "./LayoutDashboard";
+import { Search } from "lucide-react";
+import useDebounce from "@/utils/useDebounce";
+import { useState } from "react";
 
 export default function Library() {
   const searchParams = useSearchParams();
-
   const activeTab = searchParams.get("tab") || "featured";
 
-  const { data: featureAssets = [], isLoading: featuredAssetsLoading } =
+  const [input, setInput] = useState("");
+
+  const debouncedValue = useDebounce(input, 1000);
+
+  const { data: allFeaturedAssets = [], isLoading: featuredAssetsLoading } =
     useQuery({
       queryKey: ["featured", "assets"],
       queryFn: () => api.getFeaturesAssets(),
       enabled: activeTab === "featured",
     });
 
-  const { data: trendingAssets = [], isLoading: trendingAssetsLoading } =
+  const { data: allTrendingAssets = [], isLoading: trendingAssetsLoading } =
     useQuery({
       queryKey: ["trending", "assets"],
       queryFn: () => api.getTrendingAssets(),
       enabled: activeTab === "featured",
     });
 
-  const { data: kpis = [], isLoading: kpisLoading } = useQuery({
+  const { data: allKpis = [], isLoading: kpisLoading } = useQuery({
     queryKey: ["kpi", "assets"],
     queryFn: () => api.getKpis(),
     enabled: activeTab === "kpis",
   });
 
-  const { data: layouts = [], isLoading: layoutLoading } = useQuery({
+  const { data: allLayouts = [], isLoading: layoutLoading } = useQuery({
     queryKey: ["layout"],
     queryFn: () => api.getLayouts(),
     enabled: activeTab === "layout",
   });
 
-  console.log({
-    layouts,
-  });
+  // Filter assets based on search term
+  const featuredAssets = allFeaturedAssets.filter((asset) =>
+    asset.title.toLowerCase().includes(debouncedValue.toLowerCase())
+  );
+
+  const trendingAssets = allTrendingAssets.filter((asset) =>
+    asset.title.toLowerCase().includes(debouncedValue.toLowerCase())
+  );
+
+  const kpis = allKpis.filter((asset) =>
+    asset.title.toLowerCase().includes(debouncedValue.toLowerCase())
+  );
+
+  const layouts = allLayouts.filter((asset) =>
+    asset.title.toLowerCase().includes(debouncedValue.toLowerCase())
+  );
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
+  console.log({ allFeaturedAssets, featuredAssets });
 
   return (
     <div>
@@ -61,7 +85,17 @@ export default function Library() {
         </div>
 
         <div className="mb-8">
-          <SearchBar />
+          <div className="relative w-full max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-auto">
+              <Search className="h-4 w-4 text-gray-400" />
+            </div>
+            <input
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent"
+              type="text"
+              placeholder="Search for assets..."
+              onChange={(e) => handleSearch(e)}
+            />
+          </div>
         </div>
 
         <div className="bg-gray-200 rounded-md">
@@ -115,7 +149,7 @@ export default function Library() {
               <AssetGrid
                 title="Featured"
                 subtitle="Most popular assets across the organization"
-                assets={featureAssets}
+                assets={featuredAssets}
                 isLoading={featuredAssetsLoading}
               />
               <AssetGrid
