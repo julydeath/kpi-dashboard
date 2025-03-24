@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import AssetGrid from "./AssetGrid";
 import { api } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 export default function Library() {
   const searchParams = useSearchParams();
@@ -26,7 +27,7 @@ export default function Library() {
       enabled: activeTab === "featured",
     });
 
-  const { data: kpis = [] } = useQuery({
+  const { data: kpis = [], isLoading: kpisLoading } = useQuery({
     queryKey: ["kpi", "assets"],
     queryFn: () => api.getKpis(),
     enabled: activeTab === "kpis",
@@ -105,11 +106,13 @@ export default function Library() {
                 title="Featured"
                 subtitle="Most popular assets across the organization"
                 assets={featureAssets}
+                isLoading={featuredAssetsLoading}
               />
               <AssetGrid
                 title="Trending"
                 subtitle="Most trending assets across the organization"
                 assets={trendingAssets}
+                isLoading={trendingAssetsLoading}
               />
             </>
           )}
@@ -119,10 +122,12 @@ export default function Library() {
               title="Key Performance Indicators"
               subtitle="Metrics to track business performance"
               assets={kpis}
+              isLoading={kpisLoading}
             />
           )}
 
           {activeTab === "layout" && <div>Layout</div>}
+          {activeTab === "storyboard" && <div>Story Board</div>}
         </>
       </div>
     </div>

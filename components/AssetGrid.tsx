@@ -3,16 +3,30 @@
 import AssetModal from "./AssetModel";
 import MetricCard from "./MetricCard";
 import { useState } from "react";
-import type {Asset} from '@/lib/data'
+import type { Asset } from "@/lib/data";
 
 interface AssetGridProps {
-  title: string
-  subtitle?: string
-  assets: Asset[]
+  title: string;
+  subtitle?: string;
+  assets: Asset[];
+  isLoading: Boolean;
 }
 
+// Loading skeleton for grid items
+const LoadingSkeleton = () => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    {[...Array(4)].map((_, index) => (
+      <div key={index} className="bg-gray-200 animate-pulse rounded-lg h-24" />
+    ))}
+  </div>
+);
 
-export default function AssetGrid({title, subtitle, assets} : AssetGridProps) {
+export default function AssetGrid({
+  title,
+  subtitle,
+  assets,
+  isLoading,
+}: AssetGridProps) {
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
 
   const handleAssetClick = (asset: Asset) => {
@@ -29,7 +43,9 @@ export default function AssetGrid({title, subtitle, assets} : AssetGridProps) {
         <p className="text-sm text-gray-500">{subtitle}</p>
       </div>
 
-      {assets.length > 0 ? (
+      {isLoading ? (
+        <LoadingSkeleton />
+      ) : assets.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {assets.map((asset) => (
             <MetricCard
