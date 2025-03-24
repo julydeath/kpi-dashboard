@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 import LayoutModel from "./LayoutModel";
-import { layouts } from "@/lib/data";
 import { Plus } from "lucide-react";
+import type { Layout } from "@/lib/data";
+
+interface LayoutDashboardProps {
+  layouts: Layout[];
+  isLoading: boolean;
+}
 
 const LoadingSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -13,8 +18,10 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-export default function LayoutDashboard() {
-  const [isLoading] = useState(false);
+export default function LayoutDashboard({
+  layouts,
+  isLoading,
+}: LayoutDashboardProps) {
   const [selectedAsset, setSelectedAsset] = useState(null);
   return (
     <div className="mt-6">
@@ -36,7 +43,7 @@ export default function LayoutDashboard() {
 
           {isLoading ? (
             <LoadingSkeleton />
-          ) : layouts.length > 0 ? (
+          ) : layouts?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {layouts.map((layout) => (
                 <div
@@ -70,7 +77,7 @@ export default function LayoutDashboard() {
             </div>
           ) : (
             <div className="bg-white p-8 rounded-lg border border-gray-200 text-center">
-              <p className="text-gray-500">
+              <p className="text-gray-500 pb-8">
                 No layouts are avalible. Create your first layout
               </p>
 

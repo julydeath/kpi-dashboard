@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import AssetGrid from "./AssetGrid";
 import { api } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
-import { Suspense } from "react";
 import LayoutDashboard from "./LayoutDashboard";
 
 export default function Library() {
@@ -32,6 +31,16 @@ export default function Library() {
     queryKey: ["kpi", "assets"],
     queryFn: () => api.getKpis(),
     enabled: activeTab === "kpis",
+  });
+
+  const { data: layouts = [], isLoading: layoutLoading } = useQuery({
+    queryKey: ["layout"],
+    queryFn: () => api.getLayouts(),
+    enabled: activeTab === "layout",
+  });
+
+  console.log({
+    layouts,
   });
 
   return (
@@ -129,7 +138,7 @@ export default function Library() {
 
           {activeTab === "layout" && (
             <div>
-              <LayoutDashboard />
+              <LayoutDashboard layouts={layouts} isLoading={layoutLoading} />
             </div>
           )}
           {activeTab === "storyboard" && <div>Story Board</div>}
