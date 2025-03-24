@@ -4,7 +4,8 @@ import Link from "next/link";
 import SearchBar from "./SearchBar";
 import { useSearchParams } from 'next/navigation'
 import AssetGrid from "./AssetGrid";
-import { type Asset, type Layout, type Storyboard } from "@/lib/data"
+import { api, type Asset, type Layout, type Storyboard } from "@/lib/data"
+import { useQuery } from "@tanstack/react-query";
 
 export default function Library() {
 
@@ -12,7 +13,26 @@ export default function Library() {
 
   const activeTab = searchParams.get('tab') || "featured"
 
+  const { data: featureAssets = [], isLoading: featuredAssetsLoading } = useQuery({
+    queryKey: ["featured","assets"],
+    queryFn: () => api.getFeaturesAssets(),
+    enabled: activeTab === "featured"
+  });
 
+
+  const { data: trendingAssets = [], isLoading : trendingAssetsLoading } = useQuery({
+    queryKey: ["trending","assets"],
+    queryFn: () => api.getTrendingAssets(),
+    enabled: activeTab === "featured"
+  });
+
+  const {data : kpis = []} = useQuery({
+    queryKey: ['kpi', "assets"],
+    queryFn: () => api.getKpis(),
+    enabled: activeTab === "kpis"
+  })
+  
+  
   return (
     <div>
       <div className="container mx-auto px-4 py-8">
@@ -40,8 +60,8 @@ export default function Library() {
               Featured
             </Link>
             <Link
-              className={`px-6 py-3 font-medium text-sm cursor-pointer ${activeTab === "kpi" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
-              href={`/?tab=kpi`}
+              className={`px-6 py-3 font-medium text-sm cursor-pointer ${activeTab === "kpis" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"}`}
+              href={`/?tab=kpis`}
             >
               KPIs
             </Link>
@@ -63,11 +83,16 @@ export default function Library() {
 
         <>
             {activeTab === "featured" && (
-                <AssetGrid />
+              <>
+                <AssetGrid title="Featured" subtitle="Most popular assets across the organization" assets={featureAssets}/>
+
+                <AssetGrid title="Trending" subtitle="Most trending assets across the organization" assets={trendingAssets}/>
+              
+              </>
             )}
 
-            {activeTab === "kpi" && (
-              <AssetGrid />
+            {activeTab === "kpis" && (
+              <AssetGrid title="Key Performance Indicators" subtitle="Metrics to track business performance" assets={kpis}/>
             )}
         </>
       </div>

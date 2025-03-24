@@ -405,5 +405,11 @@ export interface Asset {
     getTrendingAssets : async() => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         return trendingAssets 
+    },
+
+    getKpis: async() => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const kpis = [...featuredAssets, ...trendingAssets].filter((asset) => asset.type === 'kpi')
+      return kpis
     }
   }
